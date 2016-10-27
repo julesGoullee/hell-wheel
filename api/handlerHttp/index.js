@@ -6,7 +6,7 @@ const restify = require('restify');
 const middlewareError = require('./error');
 const {addWheel, getWheelById, destroyById} = require('../wheels');
 const middlewaresReqConfig = require('./reqConfig');
-const indexString = fs.readFileSync(path.resolve(__dirname, '../../app/build/index.html') ).toString('utf-8');
+const indexString = fs.readFileSync(path.resolve(__dirname, '../../front/build/index.html') ).toString('utf-8');
 const server = restify.createServer({
   'name': 'capture-radio-stream',
   'version': '0.0.1'
@@ -108,7 +108,7 @@ server.get('/:id', (req, res, next) => {
 });
 
 server.get(/\.*/, restify.serveStatic({
-  directory: path.resolve(__dirname, '../../app/build'),
+  directory: path.resolve(__dirname, '../../front/build'),
   default: 'index.html'
 }) );
 

@@ -16,14 +16,14 @@ RUN curl -SLO "https://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-
 
 ENV NODE_ENV production
 
-WORKDIR /api
+WORKDIR /app
 COPY ./api/package.json /api/
 RUN npm install
 COPY ./api /api
 
 WORKDIR /app/
-COPY ./app/build /app
+COPY ./front/build /app/front/build
 
-WORKDIR /api
+WORKDIR /app/api
 
 CMD npm start
