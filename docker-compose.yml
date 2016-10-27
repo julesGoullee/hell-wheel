@@ -2,6 +2,6 @@ app:
   build: ./
   environment:
       API_ADDR: 'v3.soundcharts.com'
-      API_PORT: 3000
+      API_PORT: 6789
   ports:
-    - 3000:3000
+    - 6789:6789
