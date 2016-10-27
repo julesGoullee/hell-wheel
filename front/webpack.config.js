@@ -5,8 +5,8 @@ const production = process.env.NODE_ENV === 'production';
 const path = require('path');
 
 const paths = {
-  'build': path.resolve('./build'),
-  'src': './src'
+  'build': path.resolve(__dirname, './build'),
+  'src': path.resolve(__dirname, './src')
 };
 
 let plugins = [
@@ -16,7 +16,8 @@ let plugins = [
   new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': `'${production || 'development'}'`,
-      'API_ADDR': `'${process.env.API_ADDR || ''}'`
+      'API_HOST': `'${process.env.API_ADDR && process.env.API_PORT ? `${process.env.API_ADDR}:${process.env.API_PORT}` : 'localhost:3000' }'`,
+      'LINK_HOST': `'${process.env.LINK_HOST || ''}'`
     }
   })
 ];
@@ -48,7 +49,7 @@ const webpackConfig = {
   'module': {
     'loaders': [
       {
-        'test': /.js?$/,
+        'test': /.js$/,
         'loader': 'babel-loader',
         'exclude': /node_modules/,
         'query': {
@@ -73,7 +74,7 @@ const webpackConfig = {
       },
       {
         'test': /\.scss$/,
-        'loaders': ['style', 'css', 'sass']
+        'loader': 'style!css!sass'
       }
     ]
   },
