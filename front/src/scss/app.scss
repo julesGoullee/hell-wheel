@@ -1,38 +1,93 @@
-$primaryColor: #ff5f4e;
+$primaryColor: #dc765d;
 
-body {
+body{
   background: $primaryColor;
   margin: 0;
   padding: 0;
-}
+  height: 100%;
+  width: 100%;
+  position: absolute;
 
-text{
-  font-family:Helvetica, Arial, sans-serif;
-  font-size:11px;
-  pointer-events:none;
-}
-#chart{
-  position:absolute;
-  width:500px;
-  height:500px;
-  top:0;
-  left:0;
-}
-#question{
-  position: absolute;
-  width:400px;
-  height:500px;
-  top:0;
-  left:520px;
-}
-#question h1{
-  font-size: 50px;
-  font-weight: bold;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  position: absolute;
-  padding: 0;
-  margin: 0;
-  top:50%;
-  -webkit-transform:translate(0,-50%);
-  transform:translate(0,-50%);
+  #root{
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    flex-direction: column;
+
+    font-size: 18px;
+    font-family: monospace;
+    color: #e4e4e4;
+
+    .center{
+      display: flex;
+      align-items: center;
+      flex-direction: row;
+      justify-content: center;
+
+      .input-container{
+
+        input{
+          margin: 0 12px;
+        }
+
+      }
+
+      #namesContainer{
+        display: flex;
+      }
+
+    }
+
+    .wheel-container{
+
+      display: flex;
+      justify-content: center;
+
+      text{
+        font-family:Helvetica, Arial, sans-serif;
+        font-size: 11px;
+        pointer-events:none;
+      }
+      #chart{
+        width:500px;
+        height:500px;
+      }
+      #question{
+        position: absolute;
+        top: 250px;
+        right: calc(50% - 255px);
+        h1{
+          font-size: 50px;
+          font-weight: bold;
+          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+          position: absolute;
+        }
+      }
+    }
+  }
+
+  .show-anim-fast{
+    transition: transform .3s ease-in-out, opacity .3s ease-in-out;
+    animation: anim-show .3s ease-in-out;
+    display: block;
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  @keyframes anim-show{
+    0% {
+      display: none;
+      opacity: 0;
+    }
+    1% {
+      display: flex;
+      opacity: 0;
+      transform: scale(0);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
 }

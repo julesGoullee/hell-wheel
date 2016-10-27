@@ -6,7 +6,7 @@ export default function launch(containerNode, gameName, names){
 
     const stringNames = names.reduce( (acc, name, i) => acc += (i === 0 ? '' : ', ') + name, '' );
 
-    containerNode.innerHTML = '<div>' + stringNames + ' joue a ' + gameName +'</div></div><div id="chart"></div><div id="question"><h1></h1></div>';
+    containerNode.innerHTML = '<div class="center show-anim-fast">' + stringNames + ' joue a ' + gameName +'</div><div class="wheel-container"><div id="chart"></div><div id="question"><h1></h1></div>';
     var padding = {top:20, right:40, bottom:0, left:0},
       w = 500 - padding.left - padding.right,
       h = 500 - padding.top  - padding.bottom,
@@ -102,6 +102,7 @@ export default function launch(containerNode, gameName, names){
 
           //populate question TODO
           d3.select("#question h1")
+            .attr('class', 'show-anim-fast')
             .text(data[picked].label);
 
           oldrotation = rotation;
@@ -118,7 +119,7 @@ export default function launch(containerNode, gameName, names){
       .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h/2)+padding.top) + ")")
       .append("path")
       .attr("d", "M-" + (r*.15) + ",0L0," + (r*.05) + "L0,-" + (r*.05) + "Z")
-      .style({"fill":"black"});
+      .style({"fill":"white"});
 
 //draw spin circle
     var spinButt = container.append("circle")
@@ -133,8 +134,9 @@ export default function launch(containerNode, gameName, names){
       .attr("x", w/2 + padding.left)
       .attr("y", h/2 + padding.top)
       .attr("text-anchor", "middle")
+      .attr('class', 'btn-whell')
       .text("GO")
-      .style({"font-weight":"bold", "font-size":"30px"});
+      .style({"font-weight":"bold", "font-size":"40px"});
 
 
     function rotTween(to) {
