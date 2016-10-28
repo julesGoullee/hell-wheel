@@ -1,6 +1,6 @@
 const config = require('../config/config');
 
-module.exports = server => {
+module.exports = (server) => {
 
   server.on('uncaughtException', (req, res, route, err) => {
 
