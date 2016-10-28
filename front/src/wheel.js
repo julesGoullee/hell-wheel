@@ -13,7 +13,7 @@ export default function launch(containerNode, gameName, names){
     const w = 500 - padding.left - padding.right;
     const h = 500 - padding.top - padding.bottom;
     const r = Math.min(w, h) / 2;
-    const color = d3.scale.category20c();
+    const color = d3.scale.category10();
     const nbModulo = { min: 2, max: 5};
     const timerWin = 2500;
 
@@ -66,11 +66,43 @@ export default function launch(containerNode, gameName, names){
       .attr('text-anchor', 'end')
       .text((d, i) => data[i].label);
 
+    svg.append('g')
+      .attr('transform', 'translate(' + (w + padding.left + padding.right) + ',' + ((h / 2) + padding.top) + ')')
+      .append('path')
+      .attr('d', 'M-' + (r * .15) + ',0L0,' + (r * .05) + 'L0,-' + (r * .05) + 'Z')
+      .style({'fill': 'white'});
+
+    const centerCircle = container.append('circle')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', 60)
+      .attr('class', 'wheel-center')
+      .style({'fill': 'white', 'cursor': 'pointer'});
+
+    const centerText = svg.append('text')
+      .attr('x', w / 2 + padding.left)
+      .attr('text-anchor', 'middle')
+      .attr('class', 'btn-whell')
+      .text('GO');
+
+    centerText.attr('y', function(){
+      return (h + this.getBBox().height + padding.top) / 2;
+
+    });
+
+    function rotTween(to) {
+
+      const i = d3.interpolate(oldrotation % 360, rotation);
+
+      return (t) => 'rotate(' + i(t) + ')';
+
+    }
 
     function spin() {
 
       const pieslice = Math.round(360 / data.length);
       rotation = Math.floor((Math.random() * nbModulo.max * 360) + nbModulo.min * 360);
+      centerCircle.on('click', null);
 
       vis.transition()
         .duration(3000)
@@ -104,38 +136,6 @@ export default function launch(containerNode, gameName, names){
           }, timerWin);
 
         });
-    }
-
-    svg.append('g')
-      .attr('transform', 'translate(' + (w + padding.left + padding.right) + ',' + ((h / 2) + padding.top) + ')')
-      .append('path')
-      .attr('d', 'M-' + (r * .15) + ',0L0,' + (r * .05) + 'L0,-' + (r * .05) + 'Z')
-      .style({'fill': 'white'});
-
-    const centerCircle = container.append('circle')
-      .attr('cx', 0)
-      .attr('cy', 0)
-      .attr('r', 60)
-      .attr('class', 'wheel-center')
-      .style({'fill': 'white', 'cursor': 'pointer'});
-
-    const centerText = svg.append('text')
-      .attr('x', w / 2 + padding.left)
-      .attr('text-anchor', 'middle')
-      .attr('class', 'btn-whell')
-      .text('GO');
-
-    centerText.attr('y', function(){
-      return (h + this.getBBox().height + padding.top) / 2;
-
-    });
-
-    function rotTween(to) {
-
-      const i = d3.interpolate(oldrotation % 360, rotation);
-
-      return (t) => 'rotate(' + i(t) + ')';
-
     }
 
     centerCircle.on('click', spin);

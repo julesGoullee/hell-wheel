@@ -6,7 +6,7 @@ export default function getId(){
 
       const id = document.location.pathname.split('/')[1];
 
-      if(typeof id === 'string' && id.length > 10){
+      if(typeof id === 'string' && id.length > 3){
 
         resolve(id);
 

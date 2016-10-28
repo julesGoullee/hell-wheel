@@ -1,12 +1,21 @@
 const log = require('npmlog');
-const uuid = require('uuid-random');
+const crypto = require('crypto');
+
+function randomValueHex(len){
+
+  return crypto.randomBytes(Math.ceil(len / 2) )
+    .toString('hex')
+    .slice(0, len);
+
+}
+
 let wheels = [];
 
 function addWheel(gameName, names){
 
   log.info('wheel', `Add ${gameName}`);
 
-  const id = uuid();
+  const id = randomValueHex(6);
   wheels.push({gameName, names, id});
 
   return id;
