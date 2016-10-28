@@ -4,7 +4,7 @@ export default function enterNames(container){
   return new Promise( (resolve, reject) => {
 
     const names = [];
-    container.innerHTML = '<div class="center show-anim-fast"><div class="input-container">Qui joue ?<input type="text" id="enterName"></div><div id="namesContainer"></div></div>';
+    container.innerHTML = '<div class="center show-anim-fast"><div class="input-container">Y a quoi ?<input type="text" id="enterName"></div><div id="namesContainer"></div></div>';
 
     const input = document.getElementById('enterName');
     const namesContainer = document.getElementById('namesContainer');
@@ -21,7 +21,7 @@ export default function enterNames(container){
           namesContainer.innerHTML += `<div class="show-anim-fast">${names.length === 1 ? '' : ','}${input.value}</div>`;
           input.value = '';
 
-        } else if(e.shiftKey){
+        } else if(e.shiftKey && names.length >= 2){
 
           document.removeEventListener('keydown', onKeyDown);
           container.innerHTML = '';

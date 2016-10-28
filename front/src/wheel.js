@@ -17,7 +17,6 @@ export default function launch(containerNode, gameName, names){
     const nbModulo = { min: 2, max: 5};
     const timerWin = 2500;
 
-    const stringNames = names.reduce((acc, name, i) => acc += (i === 0 ? '' : ', ') + name, '');
     const data = names.map(name => {
 
       return {
@@ -30,7 +29,7 @@ export default function launch(containerNode, gameName, names){
     let oldrotation = 0;
     let rotation = 0;
 
-    containerNode.innerHTML = '<div class="center show-anim-fast">' + stringNames + ' joue a ' + gameName + '</div><div class="wheel-container"><div id="chart"></div><div id="result"><h1></h1></div>';
+    containerNode.innerHTML = '<div class="center show-anim-fast">It\'s time to (random) choose for ' + gameName + '</div><div class="wheel-container"><div id="chart"></div><div id="result"><h1></h1></div>';
 
     const svg = d3.select('#chart')
       .append('svg')
