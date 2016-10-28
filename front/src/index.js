@@ -1,66 +1,70 @@
-//https://github.com/zilverline/react-tap-event-plugin Needed for onTouchTap
 // Inject inline sass
 import './scss/app.scss';
 
-import enterNames from './enterNames';
-import enterGame from './enterGame';
-import launch from './wheel';
+import { createWheel, getWheelById, launchWheel } from './connector';
 import endGame from './endGame';
+import enterGame from './enterGame';
+import enterNames from './enterNames';
 import getUrl from './getUrl';
-import {getWheelById, createWheel, launchWheel} from './connector';
-import showLink from './showLink';
+import launch from './wheel';
 import showError from './showError';
+import showLink from './showLink';
 
-document.addEventListener('DOMContentLoaded', () => {
+function onReady(){
 
-  const root = document.getElementById('root');
+  const nodeRoot = document.getElementById('root');
   let names = [];
   let gameName = '';
 
-  getUrl().then(id => {
+  const id = getUrl();
 
-    if(id){
+  async function userEnter(){
 
-      getWheelById(id).then( (res) => {
+    names = await enterNames(nodeRoot);
+    gameName = await enterGame(nodeRoot, names);
 
-        gameName = res.gameName;
-        names = res.names;
+    return {
+      names,
+      gameName
+    };
 
-        launch(root, gameName, names)
-          .then((winName) => {
-            launchWheel(id);
-            endGame(root, gameName, winName)
-          });
+  }
 
-      }).catch(err => {
+  if(id){
 
-        showError(root, 'To late guys !');
+    getWheelById(id).then( (res) => {
 
-      });
+      gameName = res.gameName;
+      names = res.names;
 
-    } else {
+      launch(nodeRoot, gameName, names)
+        .then( (winName) => {
 
-      enterNames(root).then(enterNames => {
-
-        names = enterNames;
-        enterGame(root, names).then((enterGameName) => {
-
-          gameName = enterGameName;
-
-          createWheel(gameName, names).then( (res) => {
-
-            showLink(root, res.id);
-
-          });
+          launchWheel(id);
+          endGame(nodeRoot, gameName, winName);
 
         });
 
-      });
-    }
+    }).catch( () => {
 
-  }).catch(err => {
-      console.error(err.stack);
+      showError(nodeRoot, 'To late guys !');
 
     });
 
-});
+  } else{
+
+    userEnter().then( () => {
+
+      createWheel(gameName, names).then( (res) => {
+
+        showLink(nodeRoot, res.id);
+
+      });
+
+    }).catch(err => console.error(err.stack) );
+
+  }
+
+}
+
+document.addEventListener('DOMContentLoaded', onReady);

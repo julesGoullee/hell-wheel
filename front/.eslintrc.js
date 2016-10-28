@@ -1,6 +1,7 @@
 //ESlintrc.js (eslint version 3.8.1)
 module.exports = {
 
+  'parser': 'babel-eslint',
   'parserOptions': {
     'ecmaVersion': 6,
     'sourceType': 'module',
@@ -34,7 +35,7 @@ module.exports = {
     'fetch': true
   },
 
-  'plugins': ['no-async-without-await'],
+  'plugins': ['no-async-without-await', 'babel'],
 
   'rules': {                                      // http://eslint.org/docs/rules/
 
@@ -52,14 +53,16 @@ module.exports = {
     'no-empty': 2,                                // disallow empty statements
     'no-ex-assign': 2,                            // disallow assigning to the exception in a catch block
     'no-extra-boolean-cast': 2,                   // disallow double-negation boolean casts in a boolean context
-    'no-extra-parens': 2,                         // disallow unnecessary parentheses
+    'no-extra-parens': [2,'all', {                // disallow unnecessary parentheses
+      'nestedBinaryExpressions': false
+    }],
     'no-extra-semi': 2,                           // disallow unnecessary semicolons
     'no-func-assign': 2,                          // disallow overwriting functions written as function declarations
     'no-inner-declarations': [2, 'both'],         // disallow function or variable declarations in nested blocks
     'no-invalid-regexp': 2,                       // disallow invalid regular expression strings in the RegExp constructor
     'no-irregular-whitespace': 2,                 // disallow irregular whitespace outside of strings and comments
     'no-obj-calls': 2,                            // disallow the use of object properties of the global object (Math and JSON) as functions
-    'no-prototype-builtin': 2,                    // Disallow use of Object.prototypes builtins directly (no-prototype-builtins)
+    'no-prototype-builtins': 2,                    // Disallow use of Object.prototypes builtins directly (no-prototype-builtins)
     'no-regex-spaces': 2,                         // disallow multiple spaces in a regular expression literal
     'no-sparse-arrays': 2,                        // disallow sparse arrays
     'no-template-curly-in-string': 2,             // disallow template literal placeholder syntax in regular strings
@@ -316,9 +319,9 @@ module.exports = {
       'after': true
     }],
     'semi': [2, 'always'],                        // require or disallow use of semicolons instead of ASI
-    'sort-keys': [2, 'asc', {                     // require object keys to be sorted
+    'sort-keys': [0, 'asc', {                     // require object keys to be sorted
       'caseSensitive': true,
-      'natural': true
+      'natural': false
     }],
     'sort-vars': 2,                               // sort variables within the same declaration block
     'space-before-blocks': [2, {                  // require or disallow space before blocks
@@ -341,7 +344,9 @@ module.exports = {
     ////////// ECMAScript 6 //////////
 
     'arrow-body-style': [2, 'as-needed'],         // require braces in arrow function body
-    'arrow-parens': 2,                            // require parens in arrow function arguments
+    'arrow-parens': [2, 'as-needed', {            // require parens in arrow function arguments
+      'requireForBlockBody': true
+    }],
     'arrow-spacing': [2, {                        // require space before/after arrow function's arrow (fixable)
       'before': true,
       'after': true
@@ -387,6 +392,15 @@ module.exports = {
 
   ////////// PLUGINS //////////
 
-  'no-async-without-await/no-async-without-await': 1
+  'no-async-without-await/no-async-without-await': 1,
 
+  'babel/generator-star-spacing': 2,
+  'babel/new-cap': 2,
+  'babel/array-bracket-spacing': 2,
+  'babel/object-curly-spacing': 2,
+  'babel/object-shorthand': 2,
+  'babel/arrow-parens': 2,
+  'babel/no-await-in-loop': 2,
+  'babel/flow-object-type': 2,
+  'babel/func-params-comma-angle': 2
 };

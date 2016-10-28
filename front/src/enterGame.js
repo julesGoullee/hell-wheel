@@ -2,11 +2,22 @@ import legend from './legend';
 
 export default function enterGame(container, names){
 
-  return new Promise( (resolve, reject) => {
+  return new Promise( (resolve) => {
 
-    const stringNames = names.reduce( (acc, name, i) => acc += (i === 0 ? '' : ', ') + name, '' );
+    const stringNames = names.reduce( (acc, stringName, i) => {
 
-    container.innerHTML = '<div class="center show-anim-fast"><div class="input-container">' + stringNames + ' Ok, pourquoi ? <input type="text" id="enterGame"></div></div>' + legend;
+      acc += (i === 0 ? '' : ', ') + stringName; //eslint-disable-line no-param-reassign
+
+      return acc;
+
+    }, '');
+
+    container.innerHTML = `
+<div class="center show-anim-fast">
+    <div class="input-container">
+        ${stringNames} Ok, pourquoi ? <input type="text" id="enterGame">
+    </div>
+</div>${legend}`;
 
     const input = document.getElementById('enterGame');
 

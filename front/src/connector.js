@@ -29,9 +29,7 @@ function request(method, path, body){
       'method': method,
       'credentials': 'include',
       'mode': 'cors',
-      'headers': new Headers({
-        'Content-Type': 'application/json'
-      }),
+      'headers': new Headers({ 'Content-Type': 'application/json' }),
       'body': JSON.stringify(body)
     })
       .then(checkStatus)
@@ -43,7 +41,7 @@ function request(method, path, body){
       })
       .catch( (err) => {
 
-        reject(err);
+        reject(err.stack);
 
       });
 
@@ -53,20 +51,24 @@ function request(method, path, body){
 
 export function getWheelById(id){
 
-  return request('post', '/getWheel', {id});
+  return request('post', '/getWheel', { id });
 
 }
 
 export function createWheel(gameName, names){
 
-  return request('post', '/createWheel', {gameName, names});
+  return request('post', '/createWheel', {
+    gameName, names
+  });
 
 }
 
 export function launchWheel(id){
 
-  return request('post', '/launchWheel', {id});
+  return request('post', '/launchWheel', { id });
 
 }
 
-export default {getWheelById, createWheel, launchWheel};
+export default {
+  getWheelById, createWheel, launchWheel
+};

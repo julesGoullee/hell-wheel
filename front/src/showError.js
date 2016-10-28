@@ -1,5 +1,5 @@
-export default function showError(root, msg){
+export default function showError(nodeRoot, msg){
 
-  root.innerHTML = '<div class="center show-anim-fast">' + msg + '</div>';
+  nodeRoot.innerHTML = `<div class="center show-anim-fast">${msg}</div>`;
 
 }
