@@ -41,10 +41,28 @@ body{
     .wheel-container{
 
       display: flex;
+      position: relative;
       justify-content: center;
 
+      .pie-title{
+        fill: #ffffff;
+        font-size: 15px;
+        font-family: sans-serif;
+      }
+
+      .wheel-center{
+
+      }
+
+      .btn-whell{
+
+        fill: $primaryColor;
+        font-weight: bold;
+        font-size: 40px;
+
+      }
+
       text{
-        font-family:Helvetica, Arial, sans-serif;
         font-size: 11px;
         pointer-events:none;
       }
@@ -52,14 +70,15 @@ body{
         width:500px;
         height:500px;
       }
-      #question{
+
+      #result{
+
         position: absolute;
-        top: 250px;
+        top: calc(50% - 50px);
         right: calc(50% - 255px);
         h1{
           font-size: 50px;
           font-weight: bold;
-          font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
           position: absolute;
         }
       }
