@@ -4,7 +4,8 @@
   "description": "get url stream from page url",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -15,6 +16,9 @@
   "dependencies": {
     "npmlog": "^4.0.0",
     "restify": "4.1.1",
-    "uuid-random": "1.0.5"
-  }
+    "uuid-random": "1.0.5",
+    "eslint": "3.8.1",
+    "eslint-plugin-no-async-without-await": "1.2.0"
+  },
+  "devDependencies": {}
 }

@@ -1,10 +1,12 @@
 const path = require('path');
 const fs = require('fs');
 const log = require('npmlog');
-const {API_PORT} = require('../config/config');
+const{ API_PORT } = require('../config/config');
 const restify = require('restify');
 const middlewareError = require('./error');
-const {addWheel, getWheelById, destroyById} = require('../wheels');
+const{
+ addWheel, getWheelById, destroyById
+} = require('../wheels');
 const middlewaresReqConfig = require('./reqConfig');
 const indexString = fs.readFileSync(path.resolve(__dirname, '../../front/build/index.html') ).toString('utf-8');
 const server = restify.createServer({
@@ -21,7 +23,7 @@ function reqCreateWheel(req, res, next){
 
     next();
 
-  }else{
+  } else{
 
     res.send(400, 'missing params');
 
@@ -33,7 +35,7 @@ server.post('/createWheel', reqCreateWheel, (req, res, next) => {
 
   const id = addWheel(req.params.gameName, req.params.names);
 
-  res.send(201, {id});
+  res.send(201, { id });
   next(false);
 
 });
@@ -45,9 +47,10 @@ function reqWheelValid(req, res, next){
 
     next();
 
-  }else{
+  } else{
 
     res.send(400, 'missing params');
+    next(false);
 
   }
 
@@ -61,12 +64,13 @@ server.post('/getWheel', reqWheelValid, (req, res, next) => {
 
     res.send(200, wheel);
 
-  } else {
+  } else{
 
     res.send(400, 'Not found');
 
   }
 
+  next(false);
 
 });
 
@@ -82,19 +86,21 @@ server.post('/launchWheel', reqWheelValid, (req, res, next) => {
 
       res.send(200);
 
-    } else {
+    } else{
 
       res.send(400);
+    
     }
 
-  } else {
+  } else{
 
     res.send(400, 'Not found');
 
   }
 
-});
+  next(false);
 
+});
 
 
 server.get('/:id', (req, res, next) => {
@@ -103,13 +109,15 @@ server.get('/:id', (req, res, next) => {
 
   res.header('Content-Type', 'text/html');
   const ind = indexString.toString();
+
   res.end(ind);
+  next(false);
 
 });
 
 server.get(/\.*/, restify.serveStatic({
-  directory: path.resolve(__dirname, '../../front/build'),
-  default: 'index.html'
+  'directory': path.resolve(__dirname, '../../front/build'),
+  'default': 'index.html'
 }) );
 
 middlewareError(server);
@@ -123,4 +131,4 @@ function listen(){
   });
 
 }
-module.exports = {listen};
+module.exports = { listen };

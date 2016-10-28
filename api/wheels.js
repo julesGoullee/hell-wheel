@@ -16,7 +16,10 @@ function addWheel(gameName, names){
   log.info('wheel', `Add ${gameName}`);
 
   const id = randomValueHex(6);
-  wheels.push({gameName, names, id});
+
+  wheels.push({
+    gameName, names, id
+  });
 
   return id;
 
@@ -35,6 +38,7 @@ function destroyById(id){
   log.info('wheel', `Destroy ${id}`);
 
   const lastSize = wheels.length;
+
   wheels = wheels.filter(wheel => wheel.id !== id);
   const newSize = wheels.length;
 
@@ -42,4 +46,6 @@ function destroyById(id){
 
 }
 
-module.exports = {addWheel, getWheelById, destroyById};
+module.exports = {
+  addWheel, getWheelById, destroyById
+};
