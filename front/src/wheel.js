@@ -2,110 +2,87 @@ import d3 from 'd3';
 
 export default function launch(containerNode, gameName, names){
 
-  return new Promise( (resolve, reject) => {
+  return new Promise( (resolve, reject) => {
 
-    const stringNames = names.reduce( (acc, name, i) => acc += (i === 0 ? '' : ', ') + name, '' );
-
-    containerNode.innerHTML = '<div class="center show-anim-fast">' + stringNames + ' joue a ' + gameName +'</div><div class="wheel-container"><div id="chart"></div><div id="question"><h1></h1></div>';
-    var padding = {top:20, right:40, bottom:0, left:0},
-      w = 500 - padding.left - padding.right,
-      h = 500 - padding.top  - padding.bottom,
-      r = Math.min(w, h)/2,
-      rotation = 0,
-      oldrotation = 0,
-      picked = 100000,
-      color = d3.scale.category20();//category20c()
-//randomNumbers = getRandomNumbers();
-
-//http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
-
-    var data = names.map(name => {
+    const padding = {
+      top: 20,
+      right: 40,
+      bottom: 0,
+      left: 0
+    };
+    const w = 500 - padding.left - padding.right;
+    const h = 500 - padding.top - padding.bottom;
+    const r = Math.min(w, h) / 2;
+    const color = d3.scale.category20c();
+    const stringNames = names.reduce((acc, name, i) => acc += (i === 0 ? '' : ', ') + name, '');
+    const data = names.map(name => {
 
       return {
         label: name,
         value: 1,
-        question: ''
       }
+
     });
-    // var data = [
-    //   {"label":"Question 1",  "value":1,  "question":"What CSS property is used for specifying the area between the content and its border?"}, // padding
-    //   {"label":"Question 2",  "value":1,  "question":"What CSS property is used for changing the font?"}, //font-family
-    //   {"label":"Question 3",  "value":1,  "question":"What CSS property is used for changing the color of text?"} //color
-    // ];
 
+    let oldrotation = 0;
+    let rotation = 0;
 
-    var svg = d3.select('#chart')
-      .append("svg")
+    containerNode.innerHTML = '<div class="center show-anim-fast">' + stringNames + ' joue a ' + gameName + '</div><div class="wheel-container"><div id="chart"></div><div id="question"><h1></h1></div>';
+
+    const svg = d3.select('#chart')
+      .append('svg')
       .data([data])
-      .attr("width",  w + padding.left + padding.right)
-      .attr("height", h + padding.top + padding.bottom);
+      .attr('width', w + padding.left + padding.right)
+      .attr('height', h + padding.top + padding.bottom);
 
-    var container = svg.append("g")
-      .attr("class", "chartholder")
-      .attr("transform", "translate(" + (w/2 + padding.left) + "," + (h/2 + padding.top) + ")");
+    const container = svg.append('g')
+      .attr('class', 'chartholder')
+      .attr('transform', 'translate(' + (w / 2 + padding.left) + ',' + (h / 2 + padding.top) + ')');
 
-    var vis = container
-      .append("g");
+    const vis = container.append('g');
 
-    var pie = d3.layout.pie().value(function(d){return d.value;});
+    const pie = d3.layout.pie().value(d =>d.value);
 
-// declare an arc generator function
-    var arc = d3.svg.arc().outerRadius(r);
+    // declare an arc generator function
+    const arc = d3.svg.arc().outerRadius(r);
 
-// select paths, use arc generator to draw
-    var arcs = vis.selectAll("g.slice")
+    // select paths, use arc generator to draw
+    const arcs = vis.selectAll('g.slice')
       .data(pie)
       .enter()
-      .append("g")
-      .attr("class", "slice");
+      .append('g')
+      .attr('class', 'slice');
 
 
-    arcs.append("path")
-      .attr("fill", function(d, i){ return color(i); })
-      .attr("d", function (d) { return arc(d); });
+    arcs.append('path')
+      .attr('fill', (d, i) => color(i))
+      .attr('d', d => arc(d));
 
-// add the text
-    arcs.append("text").attr("transform", function(d){
+    // add the text
+    arcs.append('text').attr('transform', (d) => {
       d.innerRadius = 0;
       d.outerRadius = r;
-      d.angle = (d.startAngle + d.endAngle)/2;
-      return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius -10) +")";
+      d.angle = (d.startAngle + d.endAngle) / 2;
+      return 'rotate(' + (d.angle * 180 / Math.PI - 90) + ')translate(' + (d.outerRadius - 10) + ')';
     })
-      .attr("text-anchor", "end")
-      .text( function(d, i) {
-        return data[i].label;
-      });
+      .attr('text-anchor', 'end')
+      .text((d, i) => data[i].label);
 
 
+    function spin() {
 
-    function spin(){
-
-      const ps = Math.round(360 / data.length);
-      // const pieslice = Math.round(1400/data.length);
-      const rng = Math.floor((Math.random() * 1400) + 360);
-
-      rotation = rng;
-
-      // rotation += 90 - Math.round(ps/2);
-      console.log(rotation, 'rotation');
+      const pieslice = Math.round(360 / data.length);
+      rotation = Math.floor((Math.random() * 1400) + 360);
 
       vis.transition()
         .duration(3000)
-        .attrTween("transform", rotTween)
-        .each("end", function(){
-          // //mark question as seen
-          // d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-          //     .attr("fill", "#111");
+        .attrTween('transform', rotTween)
+        .each('end', () => {
 
-          // const win = data.find((pie, i) => {
-          //   const newPiePos = ( (rotation + i * ps + 90) ) % 360;
-          //
-          //   return ( (rotation + i * ps) + 90 ) % 360 === 90;
-          //
-          // });
           const newPiesPos = data.map((pie, i) => {
 
-            const newPiePos = ( (rotation + i * ps) - 90) % 360;
+            const newPiePos = ( (rotation + i * pieslice) - 90) % 360;
+
             return {
               pie: pie,
               pos: newPiePos
@@ -113,7 +90,7 @@ export default function launch(containerNode, gameName, names){
 
           });
 
-          const sorted = newPiesPos.sort( (a, b) => a.pos > b.pos ? -1 : 1);
+          const sorted = newPiesPos.sort((a, b) => a.pos > b.pos ? -1 : 1);
           const win = sorted[0].pie;
 
           d3.select("#question h1")
@@ -129,54 +106,37 @@ export default function launch(containerNode, gameName, names){
         });
     }
 
-//make arrow
-    svg.append("g")
-      .attr("transform", "translate(" + (w + padding.left + padding.right) + "," + ((h/2)+padding.top) + ")")
-      .append("path")
-      .attr("d", "M-" + (r*.15) + ",0L0," + (r*.05) + "L0,-" + (r*.05) + "Z")
-      .style({"fill":"white"});
+    //make arrow
+    svg.append('g')
+      .attr('transform', 'translate(' + (w + padding.left + padding.right) + ',' + ((h / 2) + padding.top) + ')')
+      .append('path')
+      .attr('d', 'M-' + (r * .15) + ',0L0,' + (r * .05) + 'L0,-' + (r * .05) + 'Z')
+      .style({'fill': 'white'});
 
-//draw spin circle
-    var spinButt = container.append("circle")
-      .attr("cx", 0)
-      .attr("cy", 0)
-      .attr("r", 60)
-      .style({"fill":"white","cursor":"pointer"});
-    spinButt.on("click", spin);
+    //draw spin circle
+    const spinButt = container.append('circle')
+      .attr('cx', 0)
+      .attr('cy', 0)
+      .attr('r', 60)
+      .style({'fill': 'white', 'cursor': 'pointer'});
+    spinButt.on('click', spin);
 
-//spin text
-    var spinText = svg.append("text")
-      .attr("x", w/2 + padding.left)
-      .attr("y", h/2 + padding.top)
-      .attr("text-anchor", "middle")
+    //spin text
+    const spinText = svg.append('text')
+      .attr('x', w / 2 + padding.left)
+      .attr('y', h / 2 + padding.top)
+      .attr('text-anchor', 'middle')
       .attr('class', 'btn-whell')
-      .text("GO")
-      .style({"font-weight":"bold", "font-size":"40px"});
+      .text('GO')
+      .style({'font-weight': 'bold', 'font-size': '40px'});
 
 
     function rotTween(to) {
-      var i = d3.interpolate(oldrotation % 360, rotation);
-      return function(t) {
-        return "rotate(" + i(t) + ")";
-      };
-    }
 
+      const i = d3.interpolate(oldrotation % 360, rotation);
 
-    function getRandomNumbers(){
-      var array = new Uint16Array(1000);
-      var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
+      return (t) => 'rotate(' + i(t) + ')';
 
-      if(window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function"){
-        window.crypto.getRandomValues(array);
-        console.log("works");
-      } else {
-        //no support for crypto, get crappy random numbers
-        for(var i=0; i < 1000; i++){
-          array[i] = Math.floor(Math.random() * 100000) + 1;
-        }
-      }
-
-      return array;
     }
 
   });
