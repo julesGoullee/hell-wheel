@@ -47,7 +47,7 @@ export default function launch(containerNode, gameName, names){
     var vis = container
       .append("g");
 
-    var pie = d3.layout.pie().sort(null).value(function(d){return d.value;});
+    var pie = d3.layout.pie().value(function(d){return d.value;});
 
 // declare an arc generator function
     var arc = d3.svg.arc().outerRadius(r);
@@ -78,19 +78,16 @@ export default function launch(containerNode, gameName, names){
 
 
 
-    function spin(d){
+    function spin(){
 
-      var  ps       = 360/data.length,
-        pieslice = Math.round(1440/data.length),
-        rng      = Math.floor((Math.random() * 1440) + 360);
+      const ps = Math.round(360 / data.length);
+      // const pieslice = Math.round(1400/data.length);
+      const rng = Math.floor((Math.random() * 1400) + 360);
 
-      rotation = (Math.round(rng / ps) * ps);
+      rotation = rng;
 
-      //TODO: click rightmost slice
-      picked = 0;
-      console.log(picked+1);
-
-      rotation += 90 - Math.round(ps/2);
+      // rotation += 90 - Math.round(ps/2);
+      console.log(rotation, 'rotation');
 
       vis.transition()
         .duration(3000)
@@ -100,16 +97,34 @@ export default function launch(containerNode, gameName, names){
           // d3.select(".slice:nth-child(" + (picked + 1) + ") path")
           //     .attr("fill", "#111");
 
-          //populate question TODO
+          // const win = data.find((pie, i) => {
+          //   const newPiePos = ( (rotation + i * ps + 90) ) % 360;
+          //
+          //   return ( (rotation + i * ps) + 90 ) % 360 === 90;
+          //
+          // });
+          const newPiesPos = data.map((pie, i) => {
+
+            const newPiePos = ( (rotation + i * ps) - 90) % 360;
+            return {
+              pie: pie,
+              pos: newPiePos
+            };
+
+          });
+
+          const sorted = newPiesPos.sort( (a, b) => a.pos > b.pos ? -1 : 1);
+          const win = sorted[0].pie;
+
           d3.select("#question h1")
             .attr('class', 'show-anim-fast')
-            .text(data[picked].label);
+            .text(win.label);
 
           oldrotation = rotation;
 
-          setTimeout(() => {
-            resolve(data[picked].label);
-          }, 1000);
+          // setTimeout(() => {
+          //   resolve(data[picked].label);
+          // }, 2000);
 
         });
     }
