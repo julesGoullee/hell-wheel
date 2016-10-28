@@ -1,10 +1,11 @@
+import legend from './legend';
 
 export default function enterNames(container){
 
   return new Promise( (resolve, reject) => {
 
     const names = [];
-    container.innerHTML = '<div class="center show-anim-fast"><div class="input-container">Y a quoi ?<input type="text" id="enterName"></div><div id="namesContainer"></div></div>';
+    container.innerHTML = '<div class="center show-anim-fast"><div class="input-container">Y a quoi ?<input type="text" id="enterName"></div><div id="namesContainer"></div></div>' + legend;
 
     const input = document.getElementById('enterName');
     const namesContainer = document.getElementById('namesContainer');

@@ -38,6 +38,16 @@ body{
 
     }
 
+    .legend-container{
+
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      bottom: 12px;
+      text-align: center;
+      width: 100%;
+    }
+
     .wheel-container{
 
       display: flex;

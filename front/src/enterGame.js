@@ -1,3 +1,4 @@
+import legend from './legend';
 
 export default function enterGame(container, names){
 
@@ -5,7 +6,7 @@ export default function enterGame(container, names){
 
     const stringNames = names.reduce( (acc, name, i) => acc += (i === 0 ? '' : ', ') + name, '' );
 
-    container.innerHTML = '<div class="center show-anim-fast"><div class="input-container">' + stringNames + ' Ok, pourquoi ? <input type="text" id="enterGame"></div></div>';
+    container.innerHTML = '<div class="center show-anim-fast"><div class="input-container">' + stringNames + ' Ok, pourquoi ? <input type="text" id="enterGame"></div></div>' + legend;
 
     const input = document.getElementById('enterGame');
 
