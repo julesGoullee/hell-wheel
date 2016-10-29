@@ -1,6 +1,6 @@
 import d3 from 'd3';
-
-export default function launch(containerNode, gameName, names){
+import { launchWheel } from './connector';
+export default function launch(containerNode, gameName, names, id){
 
   return new Promise( (resolve) => {
 
@@ -157,6 +157,7 @@ export default function launch(containerNode, gameName, names){
             .text(win.label);
 
           oldrotation = rotation;
+          launchWheel(id);
 
           setTimeout( () => {
 

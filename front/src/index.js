@@ -1,7 +1,7 @@
 // Inject inline sass
 import './scss/app.scss';
 
-import { createWheel, getWheelById, launchWheel } from './connector';
+import { createWheel, getWheelById } from './connector';
 import endGame from './endGame';
 import enterGame from './enterGame';
 import enterNames from './enterNames';
@@ -37,10 +37,9 @@ function onReady(){
       gameName = res.gameName;
       names = res.names;
 
-      launch(nodeRoot, gameName, names)
+      launch(nodeRoot, gameName, names, id)
         .then( (winName) => {
 
-          launchWheel(id);
           endGame(nodeRoot, gameName, winName);
 
         });
