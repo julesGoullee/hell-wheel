@@ -9,9 +9,7 @@ const paths = {
 
 let plugins = [
   new webpack.ProvidePlugin({ 'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch' }),
-  new webpack.DefinePlugin({ 'process.env': {
-    'NODE_ENV': `'${production || 'development'}'`
-  }})
+  new webpack.DefinePlugin({ 'process.env': { 'NODE_ENV': `'${production || 'development'}'` }})
 ];
 
 if(production){

@@ -1,0 +1,20 @@
+{
+  "name": "hell-wheel",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api/index.js",
+  "scripts": {
+    "postinstall": "npm run _install-api && npm run _install-front",
+    "_install-api": "cd api && npm i && npm run lint",
+    "_install-front": "cd front && npm i && npm run lint",
+    "start": "cd api && node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "jules@soundcharts.com",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {}
+}

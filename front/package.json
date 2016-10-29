@@ -4,7 +4,7 @@
     "build": "webpack --progress",
     "lint": "eslint . --ext .js",
     "dev": "webpack-dev-server --hot --inline --history-api-fallback --watch-poll --host 0.0.0.0",
-    "postinstall": "npm run build",
+    "postinstall": "npm run deploiement",
     "deploiement": "npm run _clean-dist && npm run build",
     "_clean-dist": "rm -rf build/*"
   },

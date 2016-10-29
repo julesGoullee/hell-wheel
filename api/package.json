@@ -1,7 +1,7 @@
 {
   "name": "hell-wheel-api",
   "version": "1.0.0",
-  "description": "get url stream from page url",
+  "description": "",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
