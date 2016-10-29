@@ -15,8 +15,9 @@ export default function enterGame(container, names){
     container.innerHTML = `
 <div class="center show-anim-fast">
     <div class="input-container">
-        ${stringNames} Ok, pourquoi ? <input type="text" id="enterGame">
+         Ok, Why ?<input type="text" id="enterGame">
     </div>
+    <div id="namesContainer">${stringNames}</div>
 </div>${legend}`;
 
     const input = document.getElementById('enterGame');

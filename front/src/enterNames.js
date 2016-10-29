@@ -5,10 +5,12 @@ export default function enterNames(container){
   return new Promise( (resolve) => {
 
     const names = [];
+    let timer = 0;
 
     container.innerHTML = `
 <div class="center show-anim-fast">
-    <div class="input-container">Y a quoi ?<input type="text" id="enterName">
+    <div class="input-container">
+        What ?<input type="text" id="enterName">
     </div>
     <div id="namesContainer"></div>
 </div>${legend}`;
@@ -17,6 +19,19 @@ export default function enterNames(container){
     const namesContainer = document.getElementById('namesContainer');
 
     input.focus();
+
+    function next(){
+
+      if(names.length >= 2){
+
+        document.removeEventListener('keydown', onKeyDown); //eslint-disable-line no-use-before-define
+        document.removeEventListener('touchstart', onTouch); //eslint-disable-line no-use-before-define
+        container.innerHTML = '';
+        resolve(names);
+
+      }
+
+    }
 
     function onKeyDown(e){
 
@@ -28,11 +43,9 @@ export default function enterNames(container){
           namesContainer.innerHTML += `<div class="show-anim-fast">${names.length === 1 ? '' : ','}${input.value}</div>`;
           input.value = '';
 
-        } else if(e.shiftKey && names.length >= 2){
+        } else if(e.shiftKey){
 
-          document.removeEventListener('keydown', onKeyDown);
-          container.innerHTML = '';
-          resolve(names);
+          next();
 
         }
 
@@ -40,6 +53,28 @@ export default function enterNames(container){
 
     }
 
+    function onTouch(){
+
+      if(timer === 0){
+
+        timer = 1;
+        timer = setTimeout( () => {
+
+          timer = 0;
+
+        }, 600);
+
+      } else{
+
+        timer = 0;
+
+        next();
+
+      }
+
+    }
+
+    document.addEventListener('touchstart', onTouch);
     document.addEventListener('keydown', onKeyDown);
 
   });

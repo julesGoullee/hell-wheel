@@ -20,8 +20,8 @@ export default function launch(containerNode, gameName, names){
     function addTitle(){
 
       containerNode.innerHTML = `
-<div class="center show-anim-fast">It's time to (random) choose for ${gameName}</div>
-<div class="wheel-container">
+<div class="center show-anim-fast" style="text-align:center;margin:12px 12px 0 12px;">It's time to (random) choose for ${gameName}</div>
+<div id="wheel-container">
     <div id="chart"></div>
     <div id="result"><h1></h1>
 </div>`;
@@ -36,13 +36,19 @@ export default function launch(containerNode, gameName, names){
         'bottom': 0,
         'left': 0
       };
-      const w = 500 - padding.left - padding.right;
-      const h = 500 - padding.top - padding.bottom;
+
+      const svgContainer = document.getElementById('wheel-container');
+
+      const rSize = svgContainer.offsetHeight * 0.6;
+
+      const w = rSize - padding.left - padding.right;
+      const h = rSize - padding.top - padding.bottom;
       const r = Math.min(w, h) / 2;
       const color = d3.scale.category10();
 
       const svg = d3.select('#chart')
         .append('svg')
+        .attr('class', 'show-anim-fast')
         .data([data])
         .attr('width', w + padding.left + padding.right)
         .attr('height', h + padding.top + padding.bottom);

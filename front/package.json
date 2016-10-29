@@ -3,7 +3,7 @@
   "scripts": {
     "build": "webpack --progress",
     "lint": "eslint . --ext .js",
-    "dev": "webpack-dev-server --hot --inline --history-api-fallback --watch-poll",
+    "dev": "webpack-dev-server --hot --inline --history-api-fallback --watch-poll --host 0.0.0.0",
     "postinstall": "npm run build",
     "deploiement": "npm run _clean-dist && npm run build",
     "_clean-dist": "rm -rf build/*"
@@ -29,6 +29,7 @@
     "babel-polyfill": "6.16.0",
     "babel-preset-es2017": "6.16.0",
     "babel-runtime": "^6.18.0",
+    "clipboard": "^1.5.15",
     "css-loader": "0.25.0",
     "d3": "3.5.17",
     "eslint": "3.8.1",
