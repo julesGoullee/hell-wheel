@@ -10,8 +10,6 @@ const paths = {
 let plugins = [
   new webpack.ProvidePlugin({ 'fetch': 'imports?this=>global!exports?global.fetch!whatwg-fetch' }),
   new webpack.DefinePlugin({ 'process.env': {
-    'API_HOST': `'${process.env.API_ADDR && process.env.API_PORT ? `${process.env.API_ADDR}:${process.env.API_PORT}` : 'localhost:3000'}'`, //eslint-disable-line no-process-env, max-len
-    'LINK_HOST': `'${process.env.LINK_HOST || ''}'`, //eslint-disable-line no-process-env
     'NODE_ENV': `'${production || 'development'}'`
   }})
 ];
