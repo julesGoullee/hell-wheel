@@ -39,7 +39,7 @@ const webpackConfig = {
       'exclude': /node_modules/,
       'query': {
         'cacheDirectory': true,
-        'presets': ['es2017'],
+        'presets': ['es2015', 'es2016', 'es2017'],
         'plugins': [
           'transform-runtime',
           'transform-decorators-legacy',
