@@ -9,6 +9,7 @@ import getUrl from './getUrl';
 import launch from './wheel';
 import showError from './showError';
 import showLink from './showLink';
+import linkNew from './linkNew';
 
 function onReady(){
 
@@ -41,12 +42,14 @@ function onReady(){
         .then( (winName) => {
 
           endGame(nodeRoot, gameName, winName);
+          nodeRoot.innerHTML += linkNew;
 
         });
 
     }).catch( () => {
 
       showError(nodeRoot, 'To late guys !');
+      nodeRoot.innerHTML += linkNew;
 
     });
 

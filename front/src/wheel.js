@@ -44,7 +44,16 @@ export default function launch(containerNode, gameName, names, id){
       const w = rSize - padding.left - padding.right;
       const h = rSize - padding.top - padding.bottom;
       const r = Math.min(w, h) / 2;
-      const color = d3.scale.category10();
+      const color = d3.scale.ordinal().range([
+        '#b3cde3',
+        '#ccebc5',
+        '#decbe4',
+        '#fed9a6',
+        '#ffffcc',
+        '#e5d8bd',
+        '#fddaec',
+        '#f2f2f2'
+      ]);
 
       const svg = d3.select('#chart')
         .append('svg')

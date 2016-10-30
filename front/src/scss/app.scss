@@ -50,7 +50,7 @@ body{
 
     }
 
-    .legend-container{
+    .legend-container {
 
       position: absolute;
       display: flex;
@@ -58,6 +58,21 @@ body{
       bottom: 12px;
       text-align: center;
       width: 100%;
+
+    }
+
+    .create-new-container{
+
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      bottom: 12px;
+      text-align: center;
+      width: 100%;
+      a{
+        color: #e4e4e4;
+
+      }
     }
 
     #wheel-container{
