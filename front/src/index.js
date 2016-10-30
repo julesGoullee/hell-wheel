@@ -7,9 +7,9 @@ import enterGame from './enterGame';
 import enterNames from './enterNames';
 import getUrl from './getUrl';
 import launch from './wheel';
+import linkNew from './linkNew';
 import showError from './showError';
 import showLink from './showLink';
-import linkNew from './linkNew';
 
 function onReady(){
 
