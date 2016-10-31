@@ -1,5 +1,7 @@
 import d3 from 'd3';
 import { launchWheel } from './connector';
+import vibrate from './vibrate';
+
 export default function launch(containerNode, gameName, names, id){
 
   return new Promise( (resolve) => {
@@ -8,6 +10,7 @@ export default function launch(containerNode, gameName, names, id){
     let oldrotation = 0;
     let centerCircle = null;
     let vis = null;
+
     const nbModulo = {
       'min': 2, 'max': 5
     };
@@ -136,6 +139,7 @@ export default function launch(containerNode, gameName, names, id){
 
       rotation = Math.floor( (Math.random() * nbModulo.max * 360) + (nbModulo.min * 360) );
       centerCircle.on('click', null);
+      vibrate.launch([0, 250, 250, 200, 150, 100, 50, 100, 50, 50, 100, 100, 100, 120, 200, 150, 200, 150, 400]);
 
       vis.transition()
         .duration(3000)
