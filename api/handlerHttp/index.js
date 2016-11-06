@@ -9,6 +9,7 @@ const{
 } = require('../wheels');
 const middlewaresReqConfig = require('./reqConfig');
 const indexString = fs.readFileSync(path.resolve(__dirname, '../../front/build/index.html') ).toString('utf-8');
+const indexCastString = fs.readFileSync(path.resolve(__dirname, '../../front/build/cast/sender.html') ).toString('utf-8');
 const server = restify.createServer({
   'name': 'capture-radio-stream',
   'version': '0.0.1'
@@ -102,13 +103,22 @@ server.post('/launchWheel', reqWheelValid, (req, res, next) => {
 
 });
 
+server.get('/cast', (req, res, next) => {
+
+  res.header('Content-Type', 'text/html');
+  const ind = indexCastString;
+
+  res.end(ind);
+  next(false);
+
+});
 
 server.get('/:id', (req, res, next) => {
 
   log.info('wheel', `Get ${req.params.id}`);
 
   res.header('Content-Type', 'text/html');
-  const ind = indexString.toString();
+  const ind = indexString;
 
   res.end(ind);
   next(false);
