@@ -4,13 +4,33 @@ let castReceiverManager = null;
 let messageBusWheel = null;
 
 // cast.receiver.logger.setLevelValue(0);
-// cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
+cast.receiver.logger.setLevelValue(cast.receiver.LoggerLevel.DEBUG);
 
 export function initialize(onConnect, onDisconnect, onMessage){
 
   return new Promise( (resolve) => {
 
     castReceiverManager = cast.receiver.CastReceiverManager.getInstance();
+    castReceiverManager.setApplicationState('Loading');
+    messageBusWheel = castReceiverManager.getCastMessageBus(config.NAMESPACE_WHEEL);
+    castReceiverManager.onSenderConnected = onConnect;
+    castReceiverManager.onSenderDisconnected = onDisconnect;
+    messageBusWheel.onMessage = onMessage;
+    castReceiverManager.start({ statusText: 'Hell-wheel' });
+    //
+    // const appConfig = new cast.receiver.CastReceiverManager.Config();
+    // appConfig.statusText = 'Hell-wheel';
+    // appConfig.maxInactivity = 6000;
+    //
+    // // Create the game before starting castReceiverManager to make sure any extra
+    // // cast namespaces can be set up.
+    // const gameConfig = new cast.receiver.games.GameManagerConfig();
+    //
+    // gameConfig.applicationName = 'Hell-wheel';
+    //
+    // const gameManager = new cast.receiver.games.GameManager(gameConfig);
+    //
+    // castReceiverManager.start(appConfig);
 
     castReceiverManager.onReady = (e) => {
 
@@ -19,15 +39,6 @@ export function initialize(onConnect, onDisconnect, onMessage){
       resolve();
 
     };
-
-    castReceiverManager.setApplicationState('Loading');
-    messageBusWheel = castReceiverManager.getCastMessageBus(config.NAMESPACE_WHEEL);
-    castReceiverManager.onSenderConnected = onConnect;
-    castReceiverManager.onSenderDisconnected = onDisconnect;
-    messageBusWheel.onMessage = onMessage;
-
-    // initialize the CastReceiverManager with an application status message
-    castReceiverManager.start({ statusText: 'Application is starting' });
 
   });
 
@@ -41,6 +52,7 @@ export function send(senderId, data){
 
 }
 
+//
 // console.log('Message [' + event.senderId + ']: ' + event.data);
 // // display the message from the sender
 // displayText(event.data);
@@ -102,5 +114,5 @@ export function send(senderId, data){
 
 export default {
   initialize,
-  send
+  // send
 };

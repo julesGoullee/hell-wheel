@@ -13,9 +13,20 @@ function sessionUpdateListener(isAlive){
 
   if(!isAlive){
 
+    console.log('isAlive', isAlive);
     session = null;
 
   }
+
+}
+
+function createSession(){
+
+  return new Promise( (resolve, reject) => {
+
+    chrome.cast.requestSession(resolve, reject);
+
+  });
 
 }
 
@@ -23,16 +34,28 @@ function requestBtn(rootNode, iconNode, cb){
 
   return () => {
 
-    chrome.cast.requestSession( (e) => {
+    function onEnd(e){
 
-      console.log(`requestBtn New Session ${e.sessionId}`);
       session = e;
       session.addUpdateListener(sessionUpdateListener);
       iconNode.removeEventListener('click', cb);
       rootNode.innerHTML = '';
+      window.addEventListener('beforeunload', () => {
+
+        session.leave();
+
+      });
+
       cb(session);
 
-    }, (err) => {
+    }
+
+    createSession().then( (eventCreate) => {
+
+      console.log(`CreateSession success ${eventCreate.sessionId}`);
+      onEnd(eventCreate);
+
+    }).catch( (err) => {
 
       if(err.code === 'cancel'){
 
@@ -69,11 +92,7 @@ function initializeCastApi(rootNode){
   return new Promise( (resolve, reject) => {
 
     let timerRestoreSession = null;
-
-    const applicationIDs = [
-      '7AB5D530',
-      chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
-    ];
+    const applicationID = '7AB5D530';
 
     // auto join policy can be one of the following three
     // 1) no auto join
@@ -85,12 +104,20 @@ function initializeCastApi(rootNode){
       chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
     ];
 
+    const autoJoin = autoJoinPolicyArray[2];
+
     function sessionListener(e){
 
       clearTimeout(timerRestoreSession);
-      console.log(`New session ID: ${e.sessionId}`);
+
+      console.log(`Session ID: ${e.sessionId}`);
       session = e;
       session.addUpdateListener(sessionUpdateListener);
+      window.addEventListener('beforeunload', () => {
+
+        session.leave();
+
+      });
 
       resolve();
 
@@ -98,7 +125,7 @@ function initializeCastApi(rootNode){
 
     function receiverListener(e){
 
-      if(e === 'available'){
+      if(e === chrome.cast.ReceiverAvailability.AVAILABLE){
 
         console.log('cast found');
 
@@ -111,12 +138,12 @@ function initializeCastApi(rootNode){
     }
 
     // request session
-    const sessionRequest = new chrome.cast.SessionRequest(applicationIDs[0]);
+    const sessionRequest = new chrome.cast.SessionRequest(applicationID, null, null, true);
     const apiConfig = new chrome.cast.ApiConfig(
       sessionRequest,
       sessionListener,
       receiverListener,
-      autoJoinPolicyArray[2]
+      autoJoin
     );
 
     chrome.cast.initialize(apiConfig, () => {
@@ -125,7 +152,7 @@ function initializeCastApi(rootNode){
 
       timerRestoreSession = setTimeout( () => {
 
-        console.log('Request new session...');
+        console.log('Request session...');
         requestSession(rootNode).then(resolve).catch(reject);
 
       }, TIMEOUT_RESTORE_SESSION);

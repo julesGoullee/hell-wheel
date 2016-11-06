@@ -15,6 +15,7 @@ export function launch(){
   }
 
 }
+
 export function create(containerNode, gameName, names){
 
   return new Promise( (resolve) => {
