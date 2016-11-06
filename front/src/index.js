@@ -2,11 +2,11 @@
 import './scss/app.scss';
 
 import { createWheel, getWheelById, launchWheel } from './connector';
+import { create } from './wheel';
 import endGame from './endGame';
 import enterGame from './enterGame';
 import enterNames from './enterNames';
 import getUrl from './getUrl';
-import { create } from './wheel';
 import linkNew from './linkNew';
 import showError from './showError';
 import showLink from './showLink';

@@ -1,3 +1,5 @@
+/*eslint-disable */
+
 export default `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" width="293.671px" height="224.571px" viewBox="0 0 293.671 224.571" enable-background="new 0 0 293.671 224.571" xml:space="preserve">
 <pattern x="-183.226" y="582.459" width="69" height="69" patternUnits="userSpaceOnUse" id="Polka_Dot_Pattern" viewBox="2.125 -70.896 69 69" overflow="visible">
 	<g>

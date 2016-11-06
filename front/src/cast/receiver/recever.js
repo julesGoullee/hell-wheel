@@ -17,6 +17,7 @@ export function initialize(onConnect, onDisconnect, onMessage){
     castReceiverManager.onSenderDisconnected = onDisconnect;
     messageBusWheel.onMessage = onMessage;
     castReceiverManager.start({ statusText: 'Hell-wheel' });
+
     //
     // const appConfig = new cast.receiver.CastReceiverManager.Config();
     // appConfig.statusText = 'Hell-wheel';
@@ -112,7 +113,4 @@ export function send(senderId, data){
 //
 // }
 
-export default {
-  initialize,
-  // send
-};
+export default { initialize };

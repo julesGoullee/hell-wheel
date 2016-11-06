@@ -1,8 +1,8 @@
 import '../../scss/app.scss';
+import { create, launch } from '../../wheel';
 import { initialize, send } from './recever';
 import config from '../configCast';
 import endGame from '../../endGame';
-import { create, launch } from '../../wheel';
 import uuid from 'uuid';
 
 let users = [];
@@ -24,7 +24,7 @@ function findRandomOtherUser(userId){
 
 }
 
-function createWheel(nodeRoot, gameName, names, senderId, gameId){
+function createWheel(nodeRoot, gameName, names, senderId, gameId){ // eslint-disable-line max-params
 
   console.log(`Wheel send by:${senderId}`);
 

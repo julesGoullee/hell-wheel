@@ -2,10 +2,11 @@ import '../../scss/app.scss';
 import {
   createWheel,
   initialize,
+  onDisconnect,
   onMessage,
-  sendLaunchWheel,
-  onDisconnect
+  sendLaunchWheel
   } from './send';
+
 import config from '../configCast';
 import enterGame from '../../enterGame';
 import enterNames from '../../enterNames';
@@ -88,7 +89,7 @@ function onReady(){
 
 }
 
-onDisconnect(() => {
+onDisconnect( () => {
 
   const rootNode = document.getElementById('root');
 
