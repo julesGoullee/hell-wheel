@@ -74,12 +74,6 @@ function createWheel(nodeRoot, gameName, names, senderId, gameId){
 
     wheelLauncher = null;
 
-    wheelsQ.push({
-      gameName: gameName,
-      names: names,
-      senderId: senderId
-    });
-
   }
 
 }

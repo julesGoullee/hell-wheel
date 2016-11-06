@@ -3,49 +3,22 @@ import {
   createWheel,
   initialize,
   onMessage,
-  sendLaunchWheel
+  sendLaunchWheel,
+  onDisconnect
   } from './send';
 import config from '../configCast';
-
+import enterGame from '../../enterGame';
+import enterNames from '../../enterNames';
 import launchWheel from './launchWheel';
-
-function createBtn(rootNode){
-
-  return new Promise( (resolve, reject) => {
-
-    rootNode.innerHTML += `<button id="create-btn">Create</button>`;
-
-    const btn = document.getElementById('create-btn');
-
-    console.log('listen');
-    btn.addEventListener('click', () => {
-
-      createWheel({
-        gameName: 'gameTest',
-        names: ['j1', 'j2', 'j3', 'j4']
-      }).then( () => {
-
-        console.log('Wheel created');
-        btn.parentNode.removeChild(btn);
-
-        resolve();
-
-      }).catch(reject);
-
-    });
-
-  });
-
-}
 
 function onReady(){
 
   const rootNode = document.getElementById('root');
-
   const castContainer = document.createElement('div');
   const createContainer = document.createElement('div');
   const launchContainer = document.createElement('div');
 
+  rootNode.innerHTML = '';
   rootNode.appendChild(castContainer);
   castContainer.setAttribute('id', 'cast-container');
   rootNode.appendChild(createContainer);
@@ -54,17 +27,37 @@ function onReady(){
   launchContainer.setAttribute('id', 'launch-container');
   launchContainer.classList.add('show-anim-fast');
 
+  async function userEnter(){
+
+    const names = await enterNames(createContainer);
+    const gameName = await enterGame(createContainer, names);
+
+    return {
+      names,
+      gameName
+    };
+
+  }
+
   initialize(castContainer).then( () => {
 
     console.log('Connect session success');
 
-    function onCreate(){
+    function onCreate({ names, gameName }){
 
-      createBtn(createContainer).then(onCreate).catch(err => console.error(err) );
+      createWheel({
+        gameName: gameName,
+        names: names
+      }).then( () => {
+
+        console.log('Wheel created');
+        userEnter().then(onCreate).catch(err => console.error(err.stack) );
+
+      }).catch(err => console.error(err.stack) );
 
     }
 
-    createBtn(createContainer).then(onCreate).catch(err => console.error(err) );
+    userEnter().then(onCreate).catch(err => console.error(err.stack) );
 
     onMessage( (channel, stringRes) => {
 
@@ -94,5 +87,20 @@ function onReady(){
   }).catch(err => console.error(err.stack) );
 
 }
+
+onDisconnect(() => {
+
+  const rootNode = document.getElementById('root');
+
+  rootNode.innerHTML = 'Disconnect';
+  console.info('Err:Disconnected');
+
+  setTimeout( () => {
+
+    onReady();
+
+  }, 1500);
+
+});
 
 document.addEventListener('DOMContentLoaded', onReady);

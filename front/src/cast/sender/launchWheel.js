@@ -6,7 +6,7 @@ export default function launchWheel(rootNode){
 <div id="container-btn">
     <div class="center show-anim-fast">
         <div class="input-container">
-            <button  id="launch-wheel-btn">Launch !</button>
+            <button  id="launch-wheel-btn" class="btn scale-anim">Launch !</button>
         </div>
     </div>
 </div>`;

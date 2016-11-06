@@ -101,13 +101,14 @@ body{
       }
 
       text{
-        font-size: 11px;
+        font-size: 15px;
         pointer-events:none;
       }
       #chart{
         display: flex;
         flex-grow: 1;
         justify-content: center;
+        align-items: center;
       }
 
       #result{
@@ -127,7 +128,7 @@ body{
 
     }
 
-    #copy-btn{
+    .btn {
       margin-top: 12px;
       box-sizing: content-box;
       padding: 0 1.5em;
@@ -141,6 +142,7 @@ body{
       transition: all 200ms cubic-bezier(0.42, 0, 0.58, 1) 10ms;
       transform: scaleX(1) scaleY(1) scaleZ(1);
       transform-origin: 50% 50% 0;
+      cursor: pointer;
     }
 
     .icon-cast{
@@ -149,6 +151,18 @@ body{
       height: 65px;
       margin: 0 auto;
       cursor: pointer;
+
+      svg {
+        width: 100%;
+        height: 100%;
+        path{
+          fill: #767eaf;
+        }
+      }
+    }
+
+    #cast-container{
+      display: flex;
 
     }
 
@@ -159,6 +173,11 @@ body{
       display: none;
       justify-content: center;
       background-color: rgba(0, 0, 0, 0.24);
+    }
+
+    #container-btn{
+      justify-content: center;
+      display: flex;
     }
 
   }
@@ -187,4 +206,16 @@ body{
     }
   }
 
+  .scale-anim {
+    animation: anim-scale 2s infinite linear;
+  }
+
+  @keyframes anim-scale{
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.3);
+    }
+  }
 }

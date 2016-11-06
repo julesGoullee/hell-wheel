@@ -1,8 +1,15 @@
 import config from '../configCast';
-const iconPath = require('./img/cast_icon_idle.png');
+import iconCast from './img/cast';
 
 let session = null;
 const TIMEOUT_RESTORE_SESSION = 1000;
+let disconnectHandler = null;
+
+export function onDisconnect(cb){
+
+  disconnectHandler = cb;
+
+}
 
 function sessionUpdateListener(isAlive){
 
@@ -15,6 +22,13 @@ function sessionUpdateListener(isAlive){
 
     console.log('isAlive', isAlive);
     session = null;
+
+    if(typeof disconnectHandler === 'function'){
+
+      chrome.cast.isAvailable = false;
+      disconnectHandler();
+
+    }
 
   }
 
@@ -77,7 +91,7 @@ function requestSession(rootNode){
 
   return new Promise( (resolve) => {
 
-    rootNode.innerHTML = `<img id="request-cast-icon" src="/${iconPath}" class="icon-cast"/>`;
+    rootNode.innerHTML = `<div id="request-cast-icon" class="scale-anim icon-cast">${iconCast}</div>`;
 
     const iconNode = document.getElementById('request-cast-icon');
 
@@ -118,7 +132,7 @@ function initializeCastApi(rootNode){
         session.leave();
 
       });
-
+      rootNode.innerHTML = '';
       resolve();
 
     }
@@ -216,7 +230,7 @@ export function initialize(rootNode){
 
     } else{
 
-      reject('No cast support');
+      reject(new Error('No cast support') );
 
     }
 
