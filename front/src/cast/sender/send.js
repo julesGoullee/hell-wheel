@@ -2,53 +2,7 @@ import config from '../configCast';
 const iconPath = require('./img/cast_icon_idle.png');
 
 let session = null;
-
-function initializeCastApi(){
-
-  return new Promise( (resolve, reject) => {
-
-    const applicationIDs = [
-      '7AB5D530',
-      chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
-    ];
-
-    // auto join policy can be one of the following three
-    // 1) no auto join
-    // 2) same appID, same URL, same tab
-    // 3) same appID and same origin URL
-    const autoJoinPolicyArray = [
-      chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
-      chrome.cast.AutoJoinPolicy.TAB_AND_ORIGIN_SCOPED,
-      chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
-    ];
-
-    // request session
-    const sessionRequest = new chrome.cast.SessionRequest(applicationIDs[0]);
-    const apiConfig = new chrome.cast.ApiConfig(
-      sessionRequest,
-      sessionListener,
-      receiverListener,
-      autoJoinPolicyArray[0]
-    );
-
-    chrome.cast.initialize(apiConfig, resolve, reject);
-
-  });
-
-}
-
-function onError(e){
-
-  console.error(`onError: ${JSON.stringify(e)}`);
-  throw e;
-
-}
-
-function onStopAppSuccess(){
-
-  console.log('onStopAppSuccess');
-
-}
+const TIMEOUT_RESTORE_SESSION = 1000;
 
 function sessionUpdateListener(isAlive){
 
@@ -65,48 +19,15 @@ function sessionUpdateListener(isAlive){
 
 }
 
-function onCreateWheel(namespaceMess, message){
-
-  console.log(`receiverMessage: ${namespaceMess}, ${message}`);
-
-}
-
-function sessionListener(e){
-
-  console.log(`New session ID: ${e.sessionId}`);
-  session = e;
-  session.addUpdateListener(sessionUpdateListener);
-
-
-}
-
-function receiverListener(e){
-
-  if(e === 'available'){
-
-    console.log('receiver found');
-
-  } else{
-
-    console.log('receiver list empty');
-
-  }
-
-}
-
-function stopApp(){
-
-  session.stop(onStopAppSuccess, onError);
-
-}
-
 function requestBtn(rootNode, iconNode, cb){
 
   return () => {
 
     chrome.cast.requestSession( (e) => {
 
+      console.log(`requestBtn New Session ${e.sessionId}`);
       session = e;
+      session.addUpdateListener(sessionUpdateListener);
       iconNode.removeEventListener('click', cb);
       rootNode.innerHTML = '';
       cb(session);
@@ -126,6 +47,92 @@ function requestBtn(rootNode, iconNode, cb){
     });
 
   };
+
+}
+
+function requestSession(rootNode){
+
+  return new Promise( (resolve) => {
+
+    rootNode.innerHTML = `<img id="request-cast-icon" src="/${iconPath}" class="icon-cast"/>`;
+
+    const iconNode = document.getElementById('request-cast-icon');
+
+    iconNode.addEventListener('click', requestBtn(rootNode, iconNode, resolve) );
+
+  });
+
+}
+
+function initializeCastApi(rootNode){
+
+  return new Promise( (resolve, reject) => {
+
+    let timerRestoreSession = null;
+
+    const applicationIDs = [
+      '7AB5D530',
+      chrome.cast.media.DEFAULT_MEDIA_RECEIVER_APP_ID
+    ];
+
+    // auto join policy can be one of the following three
+    // 1) no auto join
+    // 2) same appID, same URL, same tab
+    // 3) same appID and same origin URL
+    const autoJoinPolicyArray = [
+      chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
+      chrome.cast.AutoJoinPolicy.TAB_AND_ORIGIN_SCOPED,
+      chrome.cast.AutoJoinPolicy.ORIGIN_SCOPED
+    ];
+
+    function sessionListener(e){
+
+      clearTimeout(timerRestoreSession);
+      console.log(`New session ID: ${e.sessionId}`);
+      session = e;
+      session.addUpdateListener(sessionUpdateListener);
+
+      resolve();
+
+    }
+
+    function receiverListener(e){
+
+      if(e === 'available'){
+
+        console.log('cast found');
+
+      } else{
+
+        console.log('cast list empty');
+
+      }
+
+    }
+
+    // request session
+    const sessionRequest = new chrome.cast.SessionRequest(applicationIDs[0]);
+    const apiConfig = new chrome.cast.ApiConfig(
+      sessionRequest,
+      sessionListener,
+      receiverListener,
+      autoJoinPolicyArray[2]
+    );
+
+    chrome.cast.initialize(apiConfig, () => {
+
+      console.log('initialize success');
+
+      timerRestoreSession = setTimeout( () => {
+
+        console.log('Request new session...');
+        requestSession(rootNode).then(resolve).catch(reject);
+
+      }, TIMEOUT_RESTORE_SESSION);
+
+    }, reject);
+
+  });
 
 }
 
@@ -167,22 +174,7 @@ export function onMessage(cb){
 
 }
 
-
-export function requestSession(rootNode){
-
-  return new Promise( (resolve) => {
-
-    rootNode.innerHTML = `<img id="request-cast-icon" src="/${iconPath}" class="icon-cast"/>`;
-
-    const iconNode = document.getElementById('request-cast-icon');
-
-    iconNode.addEventListener('click', requestBtn(rootNode, iconNode, resolve) );
-
-  });
-
-}
-
-export function initialize(){
+export function initialize(rootNode){
 
   return new Promise( (resolve, reject) => {
 
@@ -190,14 +182,14 @@ export function initialize(){
 
       setTimeout( () => {
 
-        initializeCastApi().then(resolve).catch(reject);
+        initializeCastApi(rootNode).then(resolve).catch(reject);
 
       }, config.CAST_API_INITIALIZATION_DELAY);
 
 
     } else{
 
-      reject('Not cast support');
+      reject('No cast support');
 
     }
 

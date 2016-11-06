@@ -14,28 +14,24 @@ function onReady(){
 
   const rootNode = document.getElementById('root');
 
-  initialize().then( () => {
+  initialize(rootNode).then( () => {
 
-    console.log('init success');
+    console.log('Connect session success');
 
-    requestSession(rootNode).then( () => {
+    createWheel({
+      gameName: 'gameTest',
+      names: ['j1', 'j2', 'j3', 'j4']
+    }).then( () => {
 
-      console.log('Connect session success');
+    });
 
-      createWheel({
-        gameName: 'gameTest',
-        names: ['j1', 'j2', 'j3', 'j4']
-      }).then( () => {
+    onMessage( (channel, stringRes) => {
 
-      });
+      const res = JSON.parse(stringRes);
 
-      onMessage( (channel, stringRes) => {
+      console.log('onMessage', `res:${JSON.stringify(res, null, 2)}`);
 
-        const res = JSON.parse(stringRes);
-
-        console.log('onMessage', `res:${JSON.stringify(res, null, 2)}`);
-
-        switch(res.method){
+      switch(res.method){
 
         case config.METHODS.LAUNCH:
 
@@ -50,12 +46,9 @@ function onReady(){
         default:
           console.error(`No handler for mess type:${res.method}`);
 
-        }
+      }
 
-      });
-
-    }).catch(err => console.error(err.stack) );
-
+    });
 
   }).catch(err => console.error(err.stack) );
 
