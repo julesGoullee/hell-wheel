@@ -1,4 +1,5 @@
-export default {
+export default { //7AB5D530
+  APP_ID: 'A44F6377',
   NAMESPACE_WHEEL: 'urn:x-cast:WHEEL',
   CAST_API_INITIALIZATION_DELAY: 1000,
   METHODS: {

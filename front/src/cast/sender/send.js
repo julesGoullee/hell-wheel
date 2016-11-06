@@ -106,7 +106,7 @@ function initializeCastApi(rootNode){
   return new Promise( (resolve, reject) => {
 
     let timerRestoreSession = null;
-    const applicationID = '7AB5D530';
+    const applicationID = config.APP_ID;
 
     // auto join policy can be one of the following three
     // 1) no auto join
