@@ -26,11 +26,11 @@ function request(method, path, body){
   return new Promise( (resolve, reject) => {
 
     fetch(`${config.API_HOST}${path}`, {
-      'method': method,
-      'credentials': 'include',
-      'mode': 'cors',
-      'headers': new Headers({ 'Content-Type': 'application/json' }),
-      'body': JSON.stringify(body)
+      method: method,
+      credentials: 'include',
+      mode: 'cors',
+      headers: new Headers({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify(body)
     })
       .then(checkStatus)
       .then(parseJSON)

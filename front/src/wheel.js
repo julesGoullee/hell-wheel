@@ -1,8 +1,21 @@
 import d3 from 'd3';
-import { launchWheel } from './connector';
 import vibrate from './vibrate';
+let onLaunch = null;
 
-export default function launch(containerNode, gameName, names, id){
+export function launch(){
+
+  if(typeof onLaunch === 'function'){
+
+    onLaunch();
+
+  } else{
+
+    console.error('onLaunch not defined');
+
+  }
+
+}
+export function create(containerNode, gameName, names){
 
   return new Promise( (resolve) => {
 
@@ -12,12 +25,12 @@ export default function launch(containerNode, gameName, names, id){
     let vis = null;
 
     const nbModulo = {
-      'min': 2, 'max': 5
+      min: 2, max: 5
     };
-    const timerWin = 2500;
+
     const data = names.map(stringName => ({
-      'label': stringName,
-      'value': 1
+      label: stringName,
+      value: 1
     }) );
 
     function addTitle(){
@@ -34,10 +47,10 @@ export default function launch(containerNode, gameName, names, id){
     function draw(){ //eslint-disable-line max-statements
 
       const padding = {
-        'top': 20,
-        'right': 40,
-        'bottom': 0,
-        'left': 0
+        top: 20,
+        right: 40,
+        bottom: 0,
+        left: 0
       };
 
       const svgContainer = document.getElementById('wheel-container');
@@ -100,7 +113,7 @@ export default function launch(containerNode, gameName, names, id){
         .attr('transform', `translate(${w + padding.left + padding.right},${(h / 2) + padding.top})`)
         .append('path')
         .attr('d', `M-${r * 0.15},0L0,${r * 0.05}L0,-${r * 0.05}Z`)
-        .style({ 'fill': 'white' });
+        .style({ fill: 'white' });
 
       centerCircle = container.append('circle')
         .attr('cx', 0)
@@ -108,7 +121,7 @@ export default function launch(containerNode, gameName, names, id){
         .attr('r', 60)
         .attr('class', 'wheel-center')
         .style({
-          'fill': 'white', 'cursor': 'pointer'
+          fill: 'white', cursor: 'pointer'
         });
 
       const centerText = svg.append('text')
@@ -135,6 +148,8 @@ export default function launch(containerNode, gameName, names, id){
 
     function spin(){
 
+      onLaunch = null;
+
       const pieslice = Math.round(360 / data.length);
 
       rotation = Math.floor( (Math.random() * nbModulo.max * 360) + (nbModulo.min * 360) );
@@ -151,8 +166,8 @@ export default function launch(containerNode, gameName, names, id){
             const newPiePos = (rotation - 90 + (i * pieslice) ) % 360;
 
             return {
-              'entry': entry,
-              'pos': newPiePos
+              entry: entry,
+              pos: newPiePos
             };
 
           });
@@ -170,13 +185,7 @@ export default function launch(containerNode, gameName, names, id){
             .text(win.label);
 
           oldrotation = rotation;
-          launchWheel(id);
-
-          setTimeout( () => {
-
-            resolve(win.label);
-
-          }, timerWin);
+          resolve(win.label);
 
         });
     
@@ -185,6 +194,7 @@ export default function launch(containerNode, gameName, names, id){
     addTitle();
     draw();
     centerCircle.on('click', spin);
+    onLaunch = spin;
 
   });
 

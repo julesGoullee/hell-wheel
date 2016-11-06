@@ -1,15 +1,16 @@
 // Inject inline sass
 import './scss/app.scss';
 
-import { createWheel, getWheelById } from './connector';
+import { createWheel, getWheelById, launchWheel } from './connector';
 import endGame from './endGame';
 import enterGame from './enterGame';
 import enterNames from './enterNames';
 import getUrl from './getUrl';
-import launch from './wheel';
+import { create } from './wheel';
 import linkNew from './linkNew';
 import showError from './showError';
 import showLink from './showLink';
+const timerWin = 2500;
 
 function onReady(){
 
@@ -38,18 +39,25 @@ function onReady(){
       gameName = res.gameName;
       names = res.names;
 
-      launch(nodeRoot, gameName, names, id)
+      create(nodeRoot, gameName, names)
         .then( (winName) => {
 
-          endGame(nodeRoot, gameName, winName);
-          nodeRoot.innerHTML += linkNew;
+          launchWheel(id);
+
+          setTimeout( () => {
+
+            endGame(nodeRoot, gameName, winName);
+            nodeRoot.innerHTML += linkNew;
+
+          }, timerWin);
 
         });
 
-    }).catch( () => {
+    }).catch( (err) => {
 
       showError(nodeRoot, 'To late guys !');
       nodeRoot.innerHTML += linkNew;
+      console.error(err);
 
     });
 

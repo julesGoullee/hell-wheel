@@ -32,7 +32,9 @@ module.exports = {
   'globals': {
     'expect': true,
     'chai': true,
-    'fetch': true
+    'fetch': true,
+    'chrome': true,
+    'cast': true
   },
 
   'plugins': ['no-async-without-await', 'babel'],
@@ -62,7 +64,7 @@ module.exports = {
     'no-invalid-regexp': 2,                       // disallow invalid regular expression strings in the RegExp constructor
     'no-irregular-whitespace': 2,                 // disallow irregular whitespace outside of strings and comments
     'no-obj-calls': 2,                            // disallow the use of object properties of the global object (Math and JSON) as functions
-    'no-prototype-builtins': 2,                    // Disallow use of Object.prototypes builtins directly (no-prototype-builtins)
+    'no-prototype-builtins': 2,                   // Disallow use of Object.prototypes builtins directly (no-prototype-builtins)
     'no-regex-spaces': 2,                         // disallow multiple spaces in a regular expression literal
     'no-sparse-arrays': 2,                        // disallow sparse arrays
     'no-template-curly-in-string': 2,             // disallow template literal placeholder syntax in regular strings
@@ -236,6 +238,7 @@ module.exports = {
       'after': false,
       'overrides': {
         'import': { 'after': true },
+        'const': { 'after': true },
         'from': { 'after': true },
         'return': { 'after': true }
       }
@@ -292,7 +295,10 @@ module.exports = {
     'no-unneeded-ternary': 2,                     // disallow the use of ternary operators when a simpler alternative exists
     'no-whitespace-before-property': 2,           // disallow whitespace before properties
     'object-curly-newline':  [2, {                // enforce consistent line breaks inside braces
-      'minProperties': 2
+      'ObjectExpression': {
+        'minProperties': 2
+      },
+      'ObjectPattern': 'never'
     }],
     'object-curly-spacing': [2, 'always', {       // require or disallow padding inside curly braces (fixable)
       'arraysInObjects': false,
@@ -305,7 +311,7 @@ module.exports = {
     'operator-assignment': [2, 'always'],         // require assignment operator shorthand where possible or prohibit it entirely
     'operator-linebreak': [2, 'after'],           // enforce operators to be placed before or after line breaks
     'padded-blocks': [2, 'always'],               // enforce padding within blocks
-    'quote-props': [2, 'always'],                 // require quotes around object literal property names
+    'quote-props': [2, 'as-needed'],              // require quotes around object literal property names
     'quotes': [2, 'single', 'avoid-escape'],      // specify whether double or single quotes should be used
     'require-jsdoc': [0, {                        // require JSDoc comment
       'require': {
