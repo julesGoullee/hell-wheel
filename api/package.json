@@ -14,11 +14,11 @@
   "author": "jules@soundcharts.com",
   "license": "ISC",
   "dependencies": {
+    "eslint": "3.8.1",
+    "eslint-plugin-no-async-without-await": "1.2.0",
     "npmlog": "^4.0.0",
     "restify": "4.1.1",
-    "uuid-random": "1.0.5",
-    "eslint": "3.8.1",
-    "eslint-plugin-no-async-without-await": "1.2.0"
+    "uuid-random": "1.0.5"
   },
   "devDependencies": {}
 }
