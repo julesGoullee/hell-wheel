@@ -10,6 +10,15 @@ const wheelsQ = [];
 let wheelRunningId = false;
 let wheelLauncher = null;
 
+function message(nodeRoot, content){
+
+  nodeRoot.innerHTML = `
+<div class="center show-anim-fast">
+    <div>${content}</div>
+</div>`;
+
+}
+
 function findRandomOtherUser(userId){
 
   const otherUsers = users.filter(user => user.id !== userId);
@@ -51,6 +60,10 @@ function createWheel(nodeRoot, gameName, names, senderId, gameId){ // eslint-dis
           const newGameId = uuid.v4();
 
           createWheel(nodeRoot, wheelInQ.gameName, wheelInQ.names, wheelInQ.senderId, newGameId);
+
+        } else{
+
+          message(nodeRoot, 'Talk to me ...');
 
         }
 
@@ -121,7 +134,7 @@ function onDisconnect(eventDisconnect){
 
 function onReady(){
 
-  const rootNode = document.getElementById('root');
+  const nodeRoot = document.getElementById('root');
 
   function onMessage(eventRes){
 
@@ -143,7 +156,7 @@ function onReady(){
 
         const gameId = uuid.v4();
 
-        createWheel(rootNode, res.wheel.gameName, res.wheel.names, eventRes.senderId, gameId);
+        createWheel(nodeRoot, res.wheel.gameName, res.wheel.names, eventRes.senderId, gameId);
 
       }
       break;
@@ -171,6 +184,7 @@ function onReady(){
   initialize(onConnect, onDisconnect, onMessage).then( () => {
 
     console.log('initialize success');
+    message(nodeRoot, 'Talk to me ...');
 
   }).catch(err => console.error(err) );
 
